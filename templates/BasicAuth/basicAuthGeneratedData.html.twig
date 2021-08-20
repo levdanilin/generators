@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>.htaccess:</h1>
+    <p>AuthType Basic</p>
+    <p>AuthName "Security Area"</p>
+    <p>AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd</p>
+    <p>Require valid-user</p>
+
+    <h1>.htpasswd </h1>
+    <p>{{ basicAuth.userName }}:{{ basicAuth.password }}</p>
+
+    {# ? {{ basicAuth.securityArea }} ? #}
+
+
+{% endblock %}
