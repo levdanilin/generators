@@ -1,6 +1,5 @@
 /.idea/
 /.env
-/composer.json
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
