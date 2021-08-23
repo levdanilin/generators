@@ -19,21 +19,17 @@ class BasicAuthController extends AbstractController
     public function generate(Request $request): Response
     {
         $basicAuth = new BasicAuth();
-        $form = $this->createForm(BasicAuthType::class);
+        $form = $this->createForm(BasicAuthType::class, $basicAuth);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            dump($basicAuth->getPassword());die;
             $passwordEncrypted = password_hash($basicAuth->getPassword(), PASSWORD_BCRYPT);
             $basicAuth->setPassword($passwordEncrypted);
-            return $this->render('BasicAuth/basicAuthGeneratedData.html.twig',[
-                'basicAuth' => $basicAuth
-                ]
-            );
         }
 
-        return $this->render('BasicAuth/basicAuthForm.html.twig', [
+        return $this->render('BasicAuth/basicAuth.html.twig', [
             'form' => $form->createView(),
+            'basicAuth' => $basicAuth,
         ]);
     }
 }

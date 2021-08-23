@@ -5,33 +5,32 @@ namespace App\Entity;
 
 class BasicAuth
 {
-    private string $securityArea;
-    private string $htpasswdPath;
-    private string $userName;
-    private string $password;
+    private ?string $directoryPath = null;
+    private ?string $htpasswdPath = null;
+    private ?string $userName = null;
+    private ?string $password = null;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSecurityArea(): string
+    public function getDirectoryPath(): ?string
     {
-        return $this->securityArea;
+        return $this->directoryPath;
     }
 
     /**
-     * @param string $securityArea
-     * @return BasicAuth
+     * @param string|null $directionPath
      */
-    public function setSecurityArea(string $securityArea): self
+    public function setDirectoryPath(?string $directoryPath): self
     {
-        $this->securityArea = $securityArea;
+        $this->directoryPath = $directoryPath;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getHtpasswdPath(): string
+    public function getHtpasswdPath(): ?string
     {
         return $this->htpasswdPath;
     }
@@ -49,7 +48,7 @@ class BasicAuth
     /**
      * @return string
      */
-    public function getUserName(): string
+    public function getUserName(): ?string
     {
         return $this->userName;
     }
@@ -67,7 +66,7 @@ class BasicAuth
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }

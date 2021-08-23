@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div style="width: 500px; margin: auto">
+        {{ form(form) }}
+        {#{% for key, value in validData %}
+            {{ dump(key => value) }}
+        {% endfor %}#}
+
+        {% set cc = '' %}
+        {% set bcc = '' %}
+        {% set body = '' %}
+
+        {% if mailTo.cc != null %}
+            {% set cc = mailTo.cc %}
+        {% endif %}
+
+        {% if mailTo.bcc != null %}
+            {% set bcc = mailTo.bcc %}
+        {% endif %}
+
+        {% if mailTo.body != null %}
+            {% set body = mailTo.body|join("%20") %}
+        {% endif %}
+
+        {{ dump(body) }}
+
+        mailto:{{mailTo.address}}?subject={{ mailTo.subject }}&cc={{cc}}&bcc={{bcc}}&body={{body}}
+
+    </div>
+{% endblock %}
