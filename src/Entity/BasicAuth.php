@@ -3,12 +3,23 @@
 declare(strict_types=1);
 namespace App\Entity;
 
+
+use App\DTO\UserData;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+
+
 class BasicAuth
 {
-    private ?string $directoryPath = null;
-    private ?string $htpasswdPath = null;
-    private ?string $userName = null;
-    private ?string $password = null;
+    protected ?string $directoryPath = null;
+    protected ?string $htpasswdPath = null;
+    protected Collection $userData;
+
+    public function __construct()
+    {
+        $this->userData = new ArrayCollection();
+    }
 
     /**
      * @return string|null
@@ -19,7 +30,8 @@ class BasicAuth
     }
 
     /**
-     * @param string|null $directionPath
+     * @param string|null $directoryPath
+     * @return BasicAuth
      */
     public function setDirectoryPath(?string $directoryPath): self
     {
@@ -28,7 +40,7 @@ class BasicAuth
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getHtpasswdPath(): ?string
     {
@@ -36,7 +48,7 @@ class BasicAuth
     }
 
     /**
-     * @param string $htpasswdPath
+     * @param string|null $htpasswdPath
      * @return BasicAuth
      */
     public function setHtpasswdPath(string $htpasswdPath): self
@@ -46,38 +58,45 @@ class BasicAuth
     }
 
     /**
-     * @return string
+     * @return Collection
      */
-    public function getUserName(): ?string
+    public function getUserData(): Collection
     {
-        return $this->userName;
+        return $this->userData;
     }
 
     /**
-     * @param string $userName
-     * @return BasicAuth
+     * TODO Es werden nur initial erstellte UserData-Objekte in Collection von BasicAuth-Object (Field UserData) gespeichert.
+     * Die, die beim klicken auf Add User Button(in Template) erstellt werden, werden nicht in die Collection hinzüfigt und sind undefined.
+     * Das liegt meine Vermutung nach entweder an dieser SetUserData bzw. an nachfolgender AddUserData Funktion. Möglich wäre, dass
+     * Symfony AddUserData aus irgendwelchem Grund nicht benutzt und deswegen neu erstellte UserData-Objekte nicht in die Collection gespeichert
+     * werden. Es kann auch sein, dass es einen Namenkonflikt (UserData) besteht und Symfony irgendwas nicht mappen kann.
+     *
+     * @param Collection $userData
+     * @return $this
      */
-    public function setUserName(string $userName): self
+    public function setUserData(Collection $userData): self
     {
-        $this->userName = $userName;
+        $this->userData = $userData;
         return $this;
     }
 
     /**
-     * @return string
+     * @param UserData $data
+     * @return $this
      */
-    public function getPassword(): ?string
+    public function addUserData(UserData $data): self
     {
-        return $this->password;
+        $data->setBasicAuths($this);
+        $this->userData->add($data);
+        return $this;
     }
 
     /**
-     * @param string $password
-     * @return BasicAuth
+     * @param UserData $data
      */
-    public function setPassword(string $password): self
+    public function removeUserData(UserData $data)
     {
-        $this->password = $password;
-        return $this;
+        $this->userData->removeElement($data);
     }
 }
