@@ -13,8 +13,11 @@ class UserDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('userName', TextType::class)
-            ->add('password', TextType::class);
+            ->add('userName', TextType::class, [
+            ])
+            ->add('password', TextType::class, [
+
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

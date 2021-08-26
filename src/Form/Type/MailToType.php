@@ -28,7 +28,10 @@ class MailToType extends AbstractType
             'attr' => [
                 'cols'=> 35, 'rows' => 7],
                 'required' => false])
-            ->add('generate', SubmitType::class)
+            ->add('generate', SubmitType::class, [
+                'label' => 'GENERATE LINK',
+                'attr' => ['class' => 'btn-light fs-5'],
+            ])
         ;
     }
 

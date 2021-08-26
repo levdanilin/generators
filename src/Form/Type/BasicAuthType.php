@@ -26,7 +26,12 @@ class BasicAuthType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
-            ->add('generate', SubmitType::class)
+            ->add('generate', SubmitType::class,
+                [
+                'row_attr' => [
+                ],
+            ]
+            )
         ;
     }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{#    {{ form(form()) }}#}
+{#    {{ form(form) }}#}
     <div style="margin: auto; width: 700px">
         {{ form_start(form) }}
             {{ form_row(form.directoryPath) }}
@@ -17,25 +17,58 @@
 
            <h4>User Data</h4>
         <div style="margin-bottom: 20px">
-            <ul class="userData list-group list-group-horizontal" style="list-style: none" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
+            <ul class="userData list-group" data-index="{{ form.userData|length > 0 ? form.userData|last.vars.name + 1 : 0 }}" style="list-style: none" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
                 {% for data in form.userData %}
-                    <li class="flex-fill">{{ form_row(data.userName) }}</li>
-                    <li class="flex-fill">{{ form_row(data.password) }}</li>
+                    <li class="d-flex justify-content-between">
+                        {{ form_row(data.userName) }}
+                        {{ form_row(data.password) }}
+                    </li>
+{#                    <li class="flex-fill">{{ form_row(data.password) }}</li>#}
                 {% endfor %}
             </ul>
         </div>
-            <button type="button" class="add_item_link" data-collection-holder-class="userData">Add User</button>
-
-
-
+        <button type="button" class="add_item_link" data-collection-holder-class="userData">Add User</button>
         {{ form_row(form.generate) }}
+
         {{ form_end(form) }}
+        <fieldset>
+            {% for data in basicAuth.userData %}
+                <div>{{ data.userName }}:{{ data.password }}</div>
+            {% endfor %}
+        </fieldset>
+
     </div>
-<script>
+
+ <div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .test             [id^="basic_auth"] {
+                display: flex;
+                justify-content: space-between;
+
+        }
+    </style>
+    <script>
     const addFormToCollection = (e) => {
         const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
         const item = document.createElement('li');
+        item.classList.add('test')
 
         item.innerHTML = collectionHolder
             .dataset
@@ -48,62 +81,24 @@
         collectionHolder.appendChild(item);
 
         collectionHolder.dataset.index++;
+        addTagFormDeleteLink(item);
     };
-    document.querySelectorAll('.add_item_link').forEach(btn => btn.addEventListener("click", addFormToCollection));
 
-    /*function addTagFormDeleteLink(tagFormLi) {
+    const addTagFormDeleteLink = (userDataFormLi) => {
+
         const removeFormButton = document.createElement('button')
         removeFormButton.classList
-        removeFormButton.innerText = 'Delete user'
+        removeFormButton.innerText = 'Remove user'
 
-        tagFormLi.append(removeFormButton);
+        userDataFormLi.append(removeFormButton);
 
         removeFormButton.addEventListener('click', (e) => {
             e.preventDefault()
-
-            tagFormLi.remove();
+            userDataFormLi.remove();
         });
     }
 
-    const userData = document.querySelectorAll('ul.userData');
-    userData.forEach((data) => {
-        addTagFormDeleteLink(data)
-    })*/
-
-    /*let link = document.querySelectorAll('.add_item_link');
-    console.log(link);*/
-    /*document.querySelectorAll('.add_item_link').forEach(btn => {btn.addEventListener('click', (e) => {
-        const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-        const item = document.createElement('li');
-        item.innerHTML = collectionHolder
-            .dataset
-            .prototype
-            .replace(
-                /__name__/g,
-                collectionHolder.dataset.index
-            );
-
-        collectionHolder.appendChild(item);
-
-        collectionHolder.dataset.index++;
-    })});*/
- /*   const tags = document.querySelectorAll('ul.userData')
-    tags.forEach((data) => {
-        addTagFormDeleteLink(data)
-    })
-
-    function addTagFormDeleteLink (tagFormLi) {
-        const removeFormButton = document.createElement('button')
-        removeFormButton.classList
-        removeFormButton.innerText = 'Delete this tag'
-
-        tagFormLi.append(removeFormButton);
-
-        removeFormButton.addEventListener('click', (e) => {
-            e.preventDefault()
-            tagFormLi.remove();
-        });
-    }*/
+    document.querySelectorAll('.add_item_link').forEach(btn => btn.addEventListener("click", addFormToCollection));
 
 </script>
 
