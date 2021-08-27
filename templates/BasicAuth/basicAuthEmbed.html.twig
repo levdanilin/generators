@@ -1,61 +1,89 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{#    {{ form(form) }}#}
     <div style="margin: auto; width: 700px">
         {{ form_start(form) }}
             {{ form_row(form.directoryPath) }}
             {{ form_row(form.htpasswdPath) }}
 
-            {#{{ form_row(form.userData) }}
-        {{ form.userData.vars.value[0].userName }}
-        {{ dump(form.userData.vars.prototype) }}#}
-        {#<ul class="userData">
-            {% for data in form.userData %}
-                <li>{{ form_row(data.password) }}</li>
-            {% endfor %}
-        </ul>#}
+            <div style="margin-bottom: 20px">
+                <ul class="userData list-group" data-index="{{ form.userData|length > 0 ? form.userData|last.vars.name + 1 : 0 }}" style="list-style: none" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
+                    {% for data in form.userData %}
+                        <li class="d-flex justify-content-between">
+                            {{ form_row(data.userName) }}
+                            {{ form_row(data.password) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-           <h4>User Data</h4>
-        <div style="margin-bottom: 20px">
-            <ul class="userData list-group" data-index="{{ form.userData|length > 0 ? form.userData|last.vars.name + 1 : 0 }}" style="list-style: none" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
-                {% for data in form.userData %}
-                    <li class="d-flex justify-content-between">
-                        {{ form_row(data.userName) }}
-                        {{ form_row(data.password) }}
-                    </li>
-{#                    <li class="flex-fill">{{ form_row(data.password) }}</li>#}
-                {% endfor %}
-            </ul>
-        </div>
-        <button type="button" class="add_item_link" data-collection-holder-class="userData">Add User</button>
-        {{ form_row(form.generate) }}
+            <button type="button" class="add_item_link" data-collection-holder-class="userData">Add User</button>
+
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col text-center" style="font-family: 'American Typewriter', sans-serif">
+                        {{ form_row(form.generate) }}
+                    </div>
+                </div>
+            </div>
 
         {{ form_end(form) }}
-        <fieldset>
-            {% for data in basicAuth.userData %}
-                <div>{{ data.userName }}:{{ data.password }}</div>
-            {% endfor %}
-        </fieldset>
-
     </div>
 
- <div class="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="">
-        <div class="modal-dialog">
+    <div class="modal fade show" id="modalWindow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
+                <div style="background-color: #C8E6C9"  class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close-button-js" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body" style="position: relative; font-size: 20px; font-family: 'American Typewriter', sans-serif">
+                    <h4 style="color: #AA00FF">.htaccess</h4>
+                    <div id="data-access" style="margin-left: -250px" class="">
+                        {% if basicAuth.directoryPath is not null%}
+                            <pre><code>
+                        &lt;directory /{{ basicAuth.directoryPath }}&gt;
+                            AuthType Basic
+                            AuthName "Secured Area"
+                            AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
+                            Require valid-user
+                        &lt;/directory&gt;
+                    </code></pre>
+                        {% else %}
+                            <pre><code>
+                        AuthType Basic
+                        AuthName "Security Area"
+                        AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
+                        Require valid-user
+                    </code></pre>
+                        {% endif %}
+                    </div>
+                    <div class="btn-group" style="position: absolute;top: 70px;right: 16px">
+                        <button id="copy-accessData-btn" class="btn btn-outline-success">copy</button>
+                        <button id="save-accessData-btn" class="btn btn-outline-primary">save</button>
+                    </div>
+                    <h4 style="color: #AA00FF">.htpasswd</h4>
+                    <div class="mt-4">
+                        {% for data in basicAuth.userData %}
+                            <div id="data-password" class="d-flex justify-content-between">
+                                <div>
+                                    {{ data.userName }}:{{ data.password }}
+                                </div>
+                                <div class="btn-group">
+                                    <button id="copy-passwordData-btn" class="btn btn-outline-success">copy</button>
+                                    <button id="save-passwordData-btn" class="btn btn-outline-primary">save</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div style="background-color: #C8E6C9" class="modal-footer">
+                    <button type="button" id="closeButton" class="btn btn-secondary close-button-js" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
+
     <style>
         .test             [id^="basic_auth"] {
                 display: flex;
@@ -63,43 +91,125 @@
 
         }
     </style>
+
     <script>
-    const addFormToCollection = (e) => {
-        const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+        const closeButtons = document.querySelectorAll('.close-button-js');
+        const modalWindow = document.querySelector('#modalWindow');
 
-        const item = document.createElement('li');
-        item.classList.add('test')
+        function copyData(htmlElement)
+        {
+            navigator.clipboard.writeText(htmlElement.innerText)
+                .then(() => {
+                    window.alert("copied!");
+                })
+        }
 
-        item.innerHTML = collectionHolder
-            .dataset
-            .prototype
-            .replace(
-                /__name__/g,
-                collectionHolder.dataset.index
-            );
+        function saveData(htmlElement)
+        {
+            if(!htmlElement)
+            {
+                return;
+            }
 
-        collectionHolder.appendChild(item);
+            let blob = new Blob([htmlElement.innerText], {type: "text/plain"});
+            let url = window.URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            link.href = url;
 
-        collectionHolder.dataset.index++;
-        addTagFormDeleteLink(item);
-    };
+            if(htmlElement.parentElement.getAttribute("id") === null) {
+                link.download = htmlElement.getAttribute("id");
+            } else {
+                link.download = htmlElement.parentElement.getAttribute("id");
+            }
 
-    const addTagFormDeleteLink = (userDataFormLi) => {
+            if(!confirm("save?"))
+            {
+                return;
+            }
 
-        const removeFormButton = document.createElement('button')
-        removeFormButton.classList
-        removeFormButton.innerText = 'Remove user'
+            link.click();
+            window.URL.revokeObjectURL(url);
+            link.remove();
+        }
 
-        userDataFormLi.append(removeFormButton);
+        let passwordDataCopyButtons = document.querySelectorAll('#copy-passwordData-btn');
+        let passwordDataSaveButtons = document.querySelectorAll('#save-passwordData-btn');
+        let accessDataCopyButton = document.querySelector('#copy-accessData-btn');
+        let accessDataSaveButton = document.querySelector('#save-accessData-btn');
 
-        removeFormButton.addEventListener('click', (e) => {
-            e.preventDefault()
-            userDataFormLi.remove();
-        });
-    }
+        passwordDataCopyButtons.forEach(passwordDataCopyButton => passwordDataCopyButton.addEventListener('click',(e) => {
+            e.preventDefault();
+            copyData(passwordDataCopyButton.parentElement.parentElement.firstElementChild);
+                }
+            )
+        )
 
-    document.querySelectorAll('.add_item_link').forEach(btn => btn.addEventListener("click", addFormToCollection));
+        passwordDataSaveButtons.forEach(passwordDataSaveButton => passwordDataSaveButton.addEventListener('click',(e) => {
+                e.preventDefault();
+                saveData(passwordDataSaveButton.parentElement.parentElement.firstElementChild);
+            }
+        ))
 
-</script>
+        accessDataCopyButton.onclick = (e) =>
+        {
+            e.preventDefault();
+            copyData(accessDataCopyButton.parentElement.parentElement.firstElementChild.nextElementSibling);
+        }
+
+        accessDataSaveButton.onclick = (e) =>
+        {
+            e.preventDefault();
+            saveData(accessDataSaveButton.parentElement.parentElement.firstElementChild.nextElementSibling);
+        }
+
+        closeButtons.forEach(closeButton =>closeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalWindow.style.display = 'none';
+        }));
+
+        let verifyStatus = '{{ verifyStatus }}';
+
+        if(verifyStatus === '1')
+        {
+            modalWindow.style.display = 'block';
+        }
+
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('li');
+            item.classList.add('test')
+
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+            addTagFormDeleteLink(item);
+        }
+
+        const addTagFormDeleteLink = (userDataFormLi) => {
+
+            const removeFormButton = document.createElement('button')
+            //removeFormButton.classList.add('test')
+            removeFormButton.innerText = 'Remove user'
+
+            userDataFormLi.append(removeFormButton);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault()
+                userDataFormLi.remove();
+            });
+        }
+
+        document.querySelectorAll('.add_item_link').forEach(btn => btn.addEventListener("click", addFormToCollection));
+
+    </script>
 
 {% endblock %}
