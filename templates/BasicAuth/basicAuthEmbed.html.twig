@@ -1,12 +1,40 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet href="{{ asset('assets/css/all.css') }}">
+{% endblock %}
 {% block body %}
-    <div style="margin: auto; width: 700px">
+
+    <style>
+        body > div:first-of-type, .col {
+            background-color: #B2DFDB;
+            font-family: 'American Typewriter', sans-serif;
+        }
+
+        .userData {
+            list-style: none;
+        }
+
+        .modal-header, .modal-footer {
+            background-color: #C8E6C9;
+        }
+
+        h4 {
+            color: #AA00FF;
+        }
+
+        #data-access {
+
+        }
+    </style>
+
+    <div class="h5 w-50 p-3 m-auto border border-success p-5">
         {{ form_start(form) }}
             {{ form_row(form.directoryPath) }}
             {{ form_row(form.htpasswdPath) }}
 
-            <div style="margin-bottom: 20px">
-                <ul class="userData list-group" data-index="{{ form.userData|length > 0 ? form.userData|last.vars.name + 1 : 0 }}" style="list-style: none" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
+            <div class="mb-4">
+                <ul class="userData list-group" data-index="{{ form.userData|length > 0 ? form.userData|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.userData.vars.prototype)|e('html_attr') }}">
                     {% for data in form.userData %}
                         <li class="d-flex justify-content-between">
                             {{ form_row(data.userName) }}
@@ -20,7 +48,7 @@
 
             <div class="container mt-5">
                 <div class="row">
-                    <div class="col text-center" style="font-family: 'American Typewriter', sans-serif">
+                    <div class="col text-center">
                         {{ form_row(form.generate) }}
                     </div>
                 </div>
@@ -29,43 +57,48 @@
         {{ form_end(form) }}
     </div>
 
-    <div class="modal fade show" id="modalWindow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="">
+    <div class="modal fade show bg-light" id="modalWindow" tabindex="-1" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div style="background-color: #C8E6C9"  class="modal-header">
+                <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                     <button type="button" class="btn-close close-button-js" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="position: relative; font-size: 20px; font-family: 'American Typewriter', sans-serif">
-                    <h4 style="color: #AA00FF">.htaccess</h4>
-                    <div id="data-access" style="margin-left: -250px" class="">
-                        {% if basicAuth.directoryPath is not null%}
-                            <pre><code>
-                        &lt;directory /{{ basicAuth.directoryPath }}&gt;
+                <div class="modal-body h5">
+                    <h4>.htaccess</h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div id="data-access" class="p-2">
+                            {% if basicAuth.directoryPath is not null%}
+
+                                <pre><code>
+                         &lt;directory /{{ basicAuth.directoryPath }}&gt;
                             AuthType Basic
                             AuthName "Secured Area"
                             AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
                             Require valid-user
-                        &lt;/directory&gt;
-                    </code></pre>
-                        {% else %}
-                            <pre><code>
-                        AuthType Basic
-                        AuthName "Security Area"
-                        AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
-                        Require valid-user
-                    </code></pre>
-                        {% endif %}
+                         &lt;/directory&gt;
+                        </code></pre>
+
+                            {% else %}
+
+                                <pre><code>
+                            AuthType Basic
+                            AuthName "Security Area"
+                            AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
+                            Require valid-user
+                        </code></pre>
+                            {% endif %}
+                        </div>
+                        <div class="btn-group">
+                            <button id="copy-accessData-btn" class="btn btn-outline-success">copy</button>
+                            <button id="save-accessData-btn" class="btn btn-outline-primary">save</button>
+                        </div>
                     </div>
-                    <div class="btn-group" style="position: absolute;top: 70px;right: 16px">
-                        <button id="copy-accessData-btn" class="btn btn-outline-success">copy</button>
-                        <button id="save-accessData-btn" class="btn btn-outline-primary">save</button>
-                    </div>
-                    <h4 style="color: #AA00FF">.htpasswd</h4>
+                    <h4>.htpasswd</h4>
                     <div class="mt-4">
                         {% for data in basicAuth.userData %}
-                            <div id="data-password" class="d-flex justify-content-between">
-                                <div>
+                            <div id="data-password" data-verify-status="{{ verifyStatus }}" class="d-flex justify-content-between align-items-center">
+                                <div class="p-2">
                                     {{ data.userName }}:{{ data.password }}
                                 </div>
                                 <div class="btn-group">
@@ -76,14 +109,15 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div style="background-color: #C8E6C9" class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" id="closeButton" class="btn btn-secondary close-button-js" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="save-allData-btn" type="button" class="btn btn-primary">Save all</button>
                 </div>
             </div>
         </div>
     </div>
 
+    {# TODO change #}
     <style>
         .test             [id^="basic_auth"] {
                 display: flex;
@@ -92,124 +126,9 @@
         }
     </style>
 
-    <script>
-        const closeButtons = document.querySelectorAll('.close-button-js');
-        const modalWindow = document.querySelector('#modalWindow');
-
-        function copyData(htmlElement)
-        {
-            navigator.clipboard.writeText(htmlElement.innerText)
-                .then(() => {
-                    window.alert("copied!");
-                })
-        }
-
-        function saveData(htmlElement)
-        {
-            if(!htmlElement)
-            {
-                return;
-            }
-
-            let blob = new Blob([htmlElement.innerText], {type: "text/plain"});
-            let url = window.URL.createObjectURL(blob);
-            let link = document.createElement("a");
-            link.href = url;
-
-            if(htmlElement.parentElement.getAttribute("id") === null) {
-                link.download = htmlElement.getAttribute("id");
-            } else {
-                link.download = htmlElement.parentElement.getAttribute("id");
-            }
-
-            if(!confirm("save?"))
-            {
-                return;
-            }
-
-            link.click();
-            window.URL.revokeObjectURL(url);
-            link.remove();
-        }
-
-        let passwordDataCopyButtons = document.querySelectorAll('#copy-passwordData-btn');
-        let passwordDataSaveButtons = document.querySelectorAll('#save-passwordData-btn');
-        let accessDataCopyButton = document.querySelector('#copy-accessData-btn');
-        let accessDataSaveButton = document.querySelector('#save-accessData-btn');
-
-        passwordDataCopyButtons.forEach(passwordDataCopyButton => passwordDataCopyButton.addEventListener('click',(e) => {
-            e.preventDefault();
-            copyData(passwordDataCopyButton.parentElement.parentElement.firstElementChild);
-                }
-            )
-        )
-
-        passwordDataSaveButtons.forEach(passwordDataSaveButton => passwordDataSaveButton.addEventListener('click',(e) => {
-                e.preventDefault();
-                saveData(passwordDataSaveButton.parentElement.parentElement.firstElementChild);
-            }
-        ))
-
-        accessDataCopyButton.onclick = (e) =>
-        {
-            e.preventDefault();
-            copyData(accessDataCopyButton.parentElement.parentElement.firstElementChild.nextElementSibling);
-        }
-
-        accessDataSaveButton.onclick = (e) =>
-        {
-            e.preventDefault();
-            saveData(accessDataSaveButton.parentElement.parentElement.firstElementChild.nextElementSibling);
-        }
-
-        closeButtons.forEach(closeButton =>closeButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalWindow.style.display = 'none';
-        }));
-
-        let verifyStatus = '{{ verifyStatus }}';
-
-        if(verifyStatus === '1')
-        {
-            modalWindow.style.display = 'block';
-        }
-
-        const addFormToCollection = (e) => {
-            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-
-            const item = document.createElement('li');
-            item.classList.add('test')
-
-            item.innerHTML = collectionHolder
-                .dataset
-                .prototype
-                .replace(
-                    /__name__/g,
-                    collectionHolder.dataset.index
-                );
-
-            collectionHolder.appendChild(item);
-
-            collectionHolder.dataset.index++;
-            addTagFormDeleteLink(item);
-        }
-
-        const addTagFormDeleteLink = (userDataFormLi) => {
-
-            const removeFormButton = document.createElement('button')
-            //removeFormButton.classList.add('test')
-            removeFormButton.innerText = 'Remove user'
-
-            userDataFormLi.append(removeFormButton);
-
-            removeFormButton.addEventListener('click', (e) => {
-                e.preventDefault()
-                userDataFormLi.remove();
-            });
-        }
-
-        document.querySelectorAll('.add_item_link').forEach(btn => btn.addEventListener("click", addFormToCollection));
-
-    </script>
-
 {% endblock %}
+ {% block javascripts %}
+     {{ parent() }}
+     <script src="{{ asset('assets/js/all.js') }}"></script>
+     <script src="{{ asset('assets/js/basic-auth.js') }}"></script>
+ {% endblock %}

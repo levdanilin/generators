@@ -2,8 +2,6 @@
 
 namespace App\DTO;
 
-use App\Entity\BasicAuth;
-
 class UserData
 {
     private ?string $userName = null;

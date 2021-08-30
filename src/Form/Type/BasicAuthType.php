@@ -2,7 +2,7 @@
 
 namespace App\Form\Type;
 
-use App\Entity\BasicAuth;
+use App\DTO\BasicAuth;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,11 +26,9 @@ class BasicAuthType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
-            ->add('generate', SubmitType::class,
-                [
-                'row_attr' => [
+            ->add('generate', SubmitType::class, [
+                    'attr' => ['class' => 'btn-light fs-5']
                 ],
-            ]
             )
         ;
     }

@@ -3,16 +3,26 @@
 namespace App\Controller;
 
 use App\DTO\UserData;
-use App\Entity\BasicAuth;
+use App\DTO\BasicAuth;
 use App\Form\Type\BasicAuthType;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BasicAuthController extends AbstractController
 {
+    /**
+     * @return RedirectResponse
+     * @Route ("/", name = "root")
+     */
+    public function redirectToBasicAuth(): RedirectResponse
+    {
+        return $this->redirectToRoute('basicauth');
+    }
+
     /**
      * @param Request $request
      * @return Response

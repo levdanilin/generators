@@ -118,6 +118,25 @@
 
         }
 
+        document.querySelector('#save-allData-btn').onclick = () => {
+            let dataAccessInnerText = document.querySelector("#data-access").innerText;
+            let dataPasswordElements = document.querySelectorAll("#data-password");
+            let dataPasswordInnerText = '';
+            //console.log(dataAccessInnerText);
+
+            dataPasswordElements.forEach(dataPasswordElement => {
+                    dataPasswordInnerText += dataPasswordElement.firstElementChild.innerText + '\n';
+                }
+            )
+            //console.log(dataPasswordInnerText);
+            let allData = dataAccessInnerText + dataPasswordInnerText;
+            let div = document.createElement('div');
+            div.innerHTML = allData;
+            document.body.appendChild(div);
+
+            saveData(div);
+        }
+
         document.querySelector('#copy-accessData-btn').onclick = () =>
         {
             copyData(document.querySelector('#data-access'));

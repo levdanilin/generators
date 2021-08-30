@@ -1,10 +1,8 @@
 <?php
 
 declare(strict_types=1);
-namespace App\Entity;
+namespace App\DTO;
 
-
-use App\DTO\UserData;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -65,16 +63,6 @@ class BasicAuth
         return $this->userData;
     }
 
-    /**
-     * TODO Es werden nur initial erstellte UserData-Objekte in Collection von BasicAuth-Object (Field UserData) gespeichert.
-     * Die, die beim klicken auf Add User Button(in Template) erstellt werden, werden nicht in die Collection hinzüfigt und sind undefined.
-     * Das liegt meine Vermutung nach entweder an dieser SetUserData bzw. an nachfolgender AddUserData Funktion. Möglich wäre, dass
-     * Symfony AddUserData aus irgendwelchem Grund nicht benutzt und deswegen neu erstellte UserData-Objekte nicht in die Collection gespeichert
-     * werden. Es kann auch sein, dass es einen Namenkonflikt (UserData) besteht und Symfony irgendwas nicht mappen kann.
-     *
-     * @param Collection $userData
-     * @return $this
-     */
     public function setUserData(Collection $userData): self
     {
         $this->userData = $userData;

@@ -24,25 +24,25 @@ class MailToController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            /*$data = [];
-            $validData = [];
-            $data['address'] = $mailTo->getAddress();
-            $data['cc'] = $mailTo->getCc();
-            $data['bcc'] = $mailTo->getBcc();
-            $data['subject'] = $mailTo->getSubject();
-            $data['body'] = $mailTo->getBody();
-            foreach($data as $key => $dataValue)
+            $mailToLink = 'mailto:' . $mailTo->getAddress() .'?' . 'subject=' . $mailTo->getSubject();
+
+            if($mailTo->getCc() !== null)
             {
-                if($dataValue != null)
-                {
-                    $validData[$key] = $dataValue;
-                }
-            }*/
+                $mailToLink .= '&cc=' . $mailTo->getCc();
+            }
+            if($mailTo->getBcc() !== null)
+            {
+                $mailToLink .= '&bcc=' . $mailTo->getBcc();
+            }
+            if($mailTo->getBody() !== null)
+            {
+                $mailToLink .= '&body=' . $mailTo->getBody();
+            }
+            $mailTo->setLink($mailToLink);
         }
 
         return $this->render('MailTo/mailTo.html.twig', [
             'form' => $form->createView(),
-//          'validData' => $validData,
             'mailTo' => $mailTo,
         ]);
 

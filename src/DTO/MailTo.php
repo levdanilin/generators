@@ -9,6 +9,25 @@ class MailTo
     private ?string $bcc = null;
     private ?string $subject = null;
     private ?string $body = null;
+    private ?string $link = null;
+
+    /**
+     * @return string|null
+     */
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param string|null $link
+     * @return MailTo
+     */
+    public function setLink(?string $link): self
+    {
+        $this->link = $link;
+        return $this;
+    }
 
     /**
      * @return string|null
