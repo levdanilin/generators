@@ -92,6 +92,7 @@ const addFormToCollection = (e) => {
 const addTagFormDeleteLink = (userDataFormLi) => {
 
     const removeFormButton = document.createElement('button')
+    removeFormButton.classList.add('btn', 'btn-outline-danger', 'fs-5', 'mb-3')
 
     removeFormButton.innerText = 'Remove user'
 
