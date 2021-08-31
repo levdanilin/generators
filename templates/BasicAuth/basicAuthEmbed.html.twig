@@ -26,6 +26,11 @@
         h4 {
             color: #AA00FF;
         }
+
+        .new-user [id^="basic_auth"] {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 
     <div class="h5 w-50 p-3 m-auto border border-success p-5">
@@ -57,11 +62,11 @@
         {{ form_end(form) }}
     </div>
 
-    <div class="modal fade show" id="modalWindow" tabindex="-1" aria-labelledby="exampleModalLabel">
+    <div class="modal fade show" id="modalWindow" tabindex="-1" aria-labelledby="ModalLabel">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="ModalLabel">Modal title</h5>
                     <button type="button" class="btn-close close-button-js" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body h5">
@@ -117,16 +122,8 @@
         </div>
     </div>
 
-    {# TODO change #}
-    <style>
-        .test             [id^="basic_auth"] {
-                display: flex;
-                justify-content: space-between;
-
-        }
-    </style>
-
 {% endblock %}
+
  {% block javascripts %}
      {{ parent() }}
      <script src="{{ asset('assets/js/all.js') }}"></script>
