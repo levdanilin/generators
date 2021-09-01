@@ -39,23 +39,20 @@ document.querySelector('#save-allData-btn').addEventListener('click', () => {
 });
 
 
-let passwordDataCopyButtons = document.querySelectorAll('#copy-passwordData-btn');
-let passwordDataSaveButtons = document.querySelectorAll('#save-passwordData-btn');
+let passwordDataCopyButton = document.querySelector('#copy-passwordData-btn');
+let passwordDataSaveButton = document.querySelector('#save-passwordData-btn');
 let accessDataCopyButton = document.querySelector('#copy-accessData-btn');
 let accessDataSaveButton = document.querySelector('#save-accessData-btn');
 
-passwordDataCopyButtons.forEach(passwordDataCopyButton => passwordDataCopyButton.addEventListener('click',(e) => {
-            e.preventDefault();
-            copyData(passwordDataCopyButton.parentElement.parentElement.firstElementChild);
-        }
-    )
-)
+passwordDataCopyButton.addEventListener('click',(e) => {
+    e.preventDefault();
+    copyData(passwordDataCopyButton.parentElement.parentElement.firstElementChild);
+})
 
-passwordDataSaveButtons.forEach(passwordDataSaveButton => passwordDataSaveButton.addEventListener('click',(e) => {
-        e.preventDefault();
-        saveData(passwordDataSaveButton.parentElement.parentElement.firstElementChild);
-    }
-))
+passwordDataSaveButton.addEventListener('click',(e) => {
+    e.preventDefault();
+    saveData(passwordDataSaveButton.parentElement.parentElement.firstElementChild);
+})
 
 accessDataCopyButton.onclick = (e) =>
 {

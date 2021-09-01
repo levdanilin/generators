@@ -1,22 +1,11 @@
 {% extends 'base.html.twig' %}
+
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet href="{{ asset('assets/css/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/mail-to.css') }}">
 {% endblock %}
+
 {% block body %}
-
-    <style>
-        .w-50, #modalWindow {
-            font-family: 'American Typewriter', sans-serif;
-            color: #5eb5e0;
-        }
-
-        #modalWindow {
-            color: #448AFF;
-            background-color: rgba(0,0,0,.6);
-        }
-    </style>
-
     <div class="w-50 h5 p-4 m-auto bg-dark bg-gradient">
         {{ form_start(form) }}
             <fieldset class="d-flex">
@@ -50,8 +39,8 @@
                     <button type="button" class="btn-close close-button-js" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex justify-content-between h5 bg-light bg-gradient align-items-center">
-                    <div id="mailToLink" data-mailto-link="{{ mailTo.link }}" class="p-2">
-                        {{ mailTo.link }}
+                    <div id="mailToLink" data-mailto-link="{{ submit }}" class="p-2 text-break">
+                        {{ mailToLinkGenerator(mailTo) }}
                     </div>
                     <div class="btn-group">
                         <button id="copy-link-btn" class="btn btn-outline-dark">copy</button>

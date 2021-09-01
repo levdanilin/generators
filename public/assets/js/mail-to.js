@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     let mailtoLinkWrapper = document.querySelector('#mailToLink');
     let mailtoLink = mailtoLinkWrapper.dataset.mailtoLink;
-    if(mailtoLink !== '')
+    if(mailtoLink === '1')
     {
         modalWindow.style.opacity = ''
         modalWindow.style.display = 'block';

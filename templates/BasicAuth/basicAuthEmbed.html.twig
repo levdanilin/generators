@@ -1,38 +1,11 @@
 {% extends 'base.html.twig' %}
+
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet href="{{ asset('assets/css/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/css/basic-auth.css') }}">
 {% endblock %}
+
 {% block body %}
-
-    <style>
-        body > div:first-of-type, .col {
-            background-color: #B2DFDB;
-            font-family: 'American Typewriter', sans-serif;
-        }
-
-        .userData {
-            list-style: none;
-        }
-
-        #modalWindow {
-            background-color: rgba(0,0,0,.7);
-        }
-
-        .modal-header, .modal-footer {
-            background-color: #C8E6C9;
-        }
-
-        h4 {
-            color: #AA00FF;
-        }
-
-        .new-user [id^="basic_auth"] {
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
-
     <div class="h5 w-50 p-3 m-auto border border-success p-5">
         {{ form_start(form) }}
             {{ form_row(form.directoryPath) }}
@@ -100,18 +73,20 @@
                         </div>
                     </div>
                     <h4>.htpasswd</h4>
-                    <div class="mt-4">
-                        {% for data in basicAuth.userData %}
-                            <div id="data-password" data-verify-status="{{ verifyStatus }}" class="d-flex justify-content-between align-items-center">
-                                <div class="p-2">
-                                    {{ data.userName }}:{{ data.password }}
+                    <div id="user-data" class="mt-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            {% for data in basicAuth.userData %}
+                                <div id="data-password" data-verify-status="{{ verifyStatus }}" class="d-flex justify-content-between align-items-center text-break">
+                                    <div class="p-2">
+                                        {{ data.userName }}:{{ data.password }}
+                                    </div>
                                 </div>
-                                <div class="btn-group">
-                                    <button id="copy-passwordData-btn" class="btn btn-outline-success">copy</button>
-                                    <button id="save-passwordData-btn" class="btn btn-outline-primary">save</button>
-                                </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <div class="btn-group">
+                            <button id="copy-passwordData-btn" class="btn btn-outline-success">copy</button>
+                            <button id="save-passwordData-btn" class="btn btn-outline-primary">save</button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

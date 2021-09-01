@@ -26,6 +26,8 @@ function saveData(htmlElement)
     let link = document.createElement("a");
     link.href = url;
 
+    console.log(htmlElement.parentElement);
+
     if(htmlElement.parentElement.getAttribute("id") === null) {
         link.download = htmlElement.getAttribute("id");
     } else {

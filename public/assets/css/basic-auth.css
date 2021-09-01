@@ -1,0 +1,25 @@
+body > div:first-of-type, .col {
+    background-color: #B2DFDB;
+    font-family: 'American Typewriter', sans-serif;
+}
+
+.userData {
+    list-style: none;
+}
+
+#modalWindow {
+    background-color: rgba(0,0,0,.7);
+}
+
+.modal-header, .modal-footer {
+    background-color: #C8E6C9;
+}
+
+h4 {
+    color: #AA00FF;
+}
+
+.new-user [id^="basic_auth"] {
+    display: flex;
+    justify-content: space-between;
+}

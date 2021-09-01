@@ -1,0 +1,7 @@
+.navbar {
+    --bs-scroll-height: 100px;
+}
+
+.navbar-brand {
+    color: #5eb5e0
+}

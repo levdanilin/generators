@@ -18,32 +18,20 @@ class MailToController extends AbstractController
      */
     public function generate(Request $request): Response
     {
+        $submit = false;
         $mailTo = new MailTo();
         $form = $this->createForm(MailToType::class, $mailTo);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $mailToLink = 'mailto:' . $mailTo->getAddress() .'?' . 'subject=' . $mailTo->getSubject();
-
-            if($mailTo->getCc() !== null)
-            {
-                $mailToLink .= '&cc=' . $mailTo->getCc();
-            }
-            if($mailTo->getBcc() !== null)
-            {
-                $mailToLink .= '&bcc=' . $mailTo->getBcc();
-            }
-            if($mailTo->getBody() !== null)
-            {
-                $mailToLink .= '&body=' . $mailTo->getBody();
-            }
-            $mailTo->setLink($mailToLink);
+            $submit = true;
         }
 
         return $this->render('MailTo/mailTo.html.twig', [
             'form' => $form->createView(),
             'mailTo' => $mailTo,
+            'submit' => $submit,
         ]);
 
     }

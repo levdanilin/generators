@@ -1,0 +1,9 @@
+.w-50, #modalWindow {
+    font-family: 'American Typewriter', sans-serif;
+    color: #5eb5e0;
+}
+
+#modalWindow {
+    color: #448AFF;
+    background-color: rgba(0,0,0,.6);
+}

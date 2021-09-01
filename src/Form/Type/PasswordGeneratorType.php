@@ -17,8 +17,9 @@ class PasswordGeneratorType extends AbstractType
         $builder
             ->add('length', IntegerType::class, [
                 'attr' => [
-                    'min' => 12,
+                    'min' => 24,
                     'max' => 92,
+                    'value' => 24,
                     'placeholder' => 'Password length (minimum 12 characters)',
                 ],
                 'label' => false,
@@ -27,19 +28,31 @@ class PasswordGeneratorType extends AbstractType
             ])
             ->add('upperCase', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Include Uppercase Letters'
+                'label' => 'Include Uppercase Letters',
+                'attr' => [
+                    'checked' => true,
+                ]
             ])
             ->add('lowerCase', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Include Lowercase Letters'
+                'label' => 'Include Lowercase Letters',
+                'attr' => [
+                    'checked' => true,
+                ]
             ])
             ->add('numbers', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Include Numbers'
+                'label' => 'Include Numbers',
+                'attr' => [
+                    'checked' => true,
+                ]
             ])
             ->add('symbols', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Include Special Symbols'
+                'label' => 'Include Special Symbols',
+                'attr' => [
+                    'checked' => true,
+                ]
             ])
             ->add('generate', SubmitType::class, [
                 'label' => 'CREATE PASSWORD',

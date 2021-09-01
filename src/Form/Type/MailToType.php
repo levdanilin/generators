@@ -4,7 +4,7 @@ namespace App\Form\Type;
 
 use App\DTO\MailTo;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,14 +16,16 @@ class MailToType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address', TextType::class)
-            ->add('cc', TextType::class, [
+            ->add('address', EmailType::class)
+            ->add('cc', EmailType::class, [
                 'required' => false,
             ])
-            ->add('bcc', TextType::class, [
+            ->add('bcc', EmailType::class, [
             'required' => false,
             ])
-            ->add('subject', TextType::class)
+            ->add('subject', TextType::class, [
+                'required' => false,
+            ])
             ->add('body', TextareaType::class, [
             'attr' => [
                 'cols'=> 35, 'rows' => 7],
