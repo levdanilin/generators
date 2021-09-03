@@ -30,6 +30,7 @@ class Category
      * @var Collection | Image[]
      * @ORM\ManyToMany(targetEntity="App\Entity\Image", mappedBy="categories")
      * @ORM\Column(nullable=true)
+     * @ORM\JoinTable(name="image")
      */
     private Collection $images;
 
