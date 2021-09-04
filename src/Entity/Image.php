@@ -24,7 +24,7 @@ class Image
      * @var string
      * @ORM\Column(type="string")
      */
-    private string $path;
+    private ?string $path = null;
 
     /**
      * @var Collection | Category[]
@@ -64,7 +64,7 @@ class Image
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }

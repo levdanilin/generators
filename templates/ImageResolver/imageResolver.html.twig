@@ -6,4 +6,8 @@
         {{ form_widget(form._token) }}
     {{ form_end(form, {'render_rest': false}) }}
 
+    {% if image.path is not null %}
+        <img src="{{ asset(image.path) }}" alt="">
+    {% endif %}
+
 {% endblock %}
