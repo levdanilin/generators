@@ -28,6 +28,12 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ app.request.attributes.get('_route') == 'passwordgenerator' ? 'active' }}" href="{{ path('passwordgenerator') }}">Password</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ app.request.attributes.get('_route') == 'imageuploader' ? 'active' }}" href="{{ path('imageuploader') }}">Upload Image</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ app.request.attributes.get('_route') == 'imageresolver' ? 'active' }}" href="{{ path('imageresolver') }}">Get Image</a>
+                            </li>
                         </ul>
                     </div>
                 </div>

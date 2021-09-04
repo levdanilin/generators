@@ -24,6 +24,7 @@ class ImageType extends AbstractType
                 'class' => Category::class,
                 'expanded' => true,
                 'multiple' => true,
+                'label' => 'Please select al least one category',
                 'choice_label' => function(Category $category)
                 {
                     return $category->getName();

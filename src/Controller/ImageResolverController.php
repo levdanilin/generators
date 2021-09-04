@@ -51,6 +51,7 @@ class ImageResolverController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($image);
                 $entityManager->flush();
+                $this->addFlash('success', 'You have successfully uploaded an image!');
             }
         }
         return $this->render('ImageResolver/imageUploader.html.twig', [
