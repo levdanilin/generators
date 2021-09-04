@@ -32,7 +32,7 @@ class Category
      * @ORM\Column(nullable=true)
      * @ORM\JoinTable(name="image")
      */
-    private Collection $images;
+    private ?Collection $images = null;
 
     public function __construct()
     {

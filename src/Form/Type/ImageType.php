@@ -33,6 +33,7 @@ class ImageType extends AbstractType
             ->add('image', FileType::class, [
                 'label' => 'Please upload an image',
                 'mapped' => false,
+                //TODO Constraints don't work   
                 'constraints' => [
                     new NotNull()
                 ]

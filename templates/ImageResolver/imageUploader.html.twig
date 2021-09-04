@@ -9,7 +9,10 @@
 
     <div id="form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3">
         {{ form_start(form) }}
-            {{ form_row(form.categories) }}
+            <div class="d-flex justify-content-between align-items-center">
+                {{ form_row(form.categories) }}
+                <a href="{{ path('imagecategory_new') }}" class="btn btn-success">Add category</a>
+            </div>
             {{ form_row(form.image) }}
             {{ form_row(form.upload) }}
             {{ form_widget(form._token) }}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Image;
+use App\Form\Type\ImageCategoryType;
 use App\Form\Type\ImageType;
 use App\Repository\ImageRepository;
 use Doctrine\DBAL\Driver\Exception;
@@ -87,5 +88,32 @@ class ImageResolverController extends AbstractController
             'image' => $image,
             'form' => $form->createView(),
             ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/imageuploader/category/new", name="imagecategory_new")
+     */
+    public function addCategory(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $categoryRepository = $em->getRepository(Category::class);
+        $categories = $categoryRepository->findAll();
+        $category = new Category();
+        $form = $this->createForm(ImageCategoryType::class, $category);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            //TODO sets image property on Category
+            //$category->setImages(null);
+            //dump($category);die;
+            $em->persist($category);
+            $em->flush();
+        }
+        return $this->render('ImageResolver/imageCategories.html.twig', [
+            'form' => $form->createView(),
+            'categories' => $categories,
+        ]);
     }
 }
