@@ -21,7 +21,7 @@ class Image
     private int $id;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(type="string")
      */
     private ?string $path = null;
@@ -82,7 +82,7 @@ class Image
     /**
      * @return ArrayCollection
      */
-    public function getCategories(): ArrayCollection
+    public function getCategories(): Collection
     {
         return $this->categories;
     }

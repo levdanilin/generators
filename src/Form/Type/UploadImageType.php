@@ -8,23 +8,26 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Count;
 
-class ImageType extends AbstractType
+class UploadImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $constraints = new NotNull();
         $builder
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'expanded' => true,
                 'multiple' => true,
-                'label' => 'Please select al least one category',
+                'constraints' => [
+                    new Count([
+                        'min' => 1,
+                        'minMessage' => "Please select at least one category",
+                    ]),
+                ],
+                'label' => 'Please select at least one category',
                 'choice_label' => function(Category $category)
                 {
                     return $category->getName();
@@ -33,14 +36,8 @@ class ImageType extends AbstractType
             ->add('image', FileType::class, [
                 'label' => 'Please upload an image',
                 'mapped' => false,
-                //TODO Constraints don't work   
-                'constraints' => [
-                    new NotNull()
-                ]
-
             ])
              ->add('upload', SubmitType::class)
-             ->add('get', SubmitType::class)
            ;
 
     }

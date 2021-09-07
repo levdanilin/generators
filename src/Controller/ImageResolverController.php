@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Image;
-use App\Form\Type\ImageCategoryType;
-use App\Form\Type\ImageType;
+use App\Form\Type\GetImageType;
+use App\Form\Type\UploadImageType;
 use App\Repository\ImageRepository;
 use Doctrine\DBAL\Driver\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +27,7 @@ class ImageResolverController extends AbstractController
     public function upload(Request $request, SluggerInterface $slugger): Response
     {
         $image = new Image();
-        $form = $this->createForm(ImageType::class, $image);
+        $form = $this->createForm(UploadImageType::class, $image);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
@@ -67,53 +66,37 @@ class ImageResolverController extends AbstractController
      */
     public function getImage(Request $request, ImageRepository $imageRepository): Response
     {
-        $image = new Image();
-        $form = $this->createForm(ImageType::class, $image);
+        $form = $this->createForm(GetImageType::class);
         $form->handleRequest($request);
+        $image = null;
 
-        if($form->isSubmitted())
+        if($form->isSubmitted() && $form->isValid())
         {
-            //dump($form->isValid());die;
-            try {
-                $randomImage = $imageRepository->findRandomByCategories($request->get('image')['categories']);
-                $image->setPath($randomImage->getPath());
-                $image->setFilename($randomImage->getFilename());
-                $image->setId($randomImage->getId());
-            } catch (Exception | \Doctrine\DBAL\Exception $e) {
-                //echo $e->getMessage();
+            $categoryIds = [];
+            $categories = $form->getData()->getCategories();
+            foreach ($categories as $category)
+            {
+                $categoryIds[] = $category->getId();
             }
-            //dump($image);die;
+
+            try {
+                $image = $imageRepository->findRandomByCategories($categoryIds);
+                if($image)
+                {
+                    $image->setCategories($categories);
+                }else {
+                    $this->addFlash('warning', 'There is no Images under this category yet');
+                }
+
+            } catch (Exception | \Doctrine\DBAL\Exception $e) {
+
+            }
+
         }
+
         return $this->render('ImageResolver/imageResolver.html.twig', [
             'image' => $image,
             'form' => $form->createView(),
             ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return Response
-     * @Route("/imageuploader/category/new", name="imagecategory_new")
-     */
-    public function addCategory(Request $request): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $categoryRepository = $em->getRepository(Category::class);
-        $categories = $categoryRepository->findAll();
-        $category = new Category();
-        $form = $this->createForm(ImageCategoryType::class, $category);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            //TODO sets image property on Category
-            //$category->setImages(null);
-            //dump($category);die;
-            $em->persist($category);
-            $em->flush();
-        }
-        return $this->render('ImageResolver/imageCategories.html.twig', [
-            'form' => $form->createView(),
-            'categories' => $categories,
-        ]);
     }
 }

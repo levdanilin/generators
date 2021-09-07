@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ImageCategoryType extends AbstractType
+class CategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,7 +18,9 @@ class ImageCategoryType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'Please enter a Category name']
             ])
-            ->add('Add', SubmitType::class)
+            ->add('Add', SubmitType::class, [
+                'attr' => ['class' => 'btn-success fs-5'],
+            ])
             ;
     }
 

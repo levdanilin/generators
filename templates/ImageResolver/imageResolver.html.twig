@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+    {% endfor %}
     <div id="form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3">
-        {{ form_start(form) }}
-            {{ form_row(form.categories) }}
-            {{ form_row(form.get) }}
-            {{ form_widget(form._token) }}
-        {{ form_end(form, {'render_rest': false}) }}
+        {{ form(form) }}
     </div>
 
-        {% if image.path is not null %}
+        {% if image is not null %}
             <div>
                 <img class="w-25 p-5 m-auto d-block" src="{{ asset(image.path) }}" alt="{{ image.filename }}">
             </div>

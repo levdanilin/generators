@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div id="form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3">
-        <h4 class="text-secondary">Your categories:</h4>
+    <div id="category-form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3 bg-secondary bg-gradient text-white">
+        <h3 class="text-dark">Your categories:</h3>
         <ul>
             {% for category in categories %}
-                <li class="">{{ category.name }}</li>
+                <div  class="p-2">
+                    <li>{{ category.name }}</li>
+                    <a href="{{ path('imagecategory_delete', {id: category.id}) }}" onclick="return confirm('Sure? All images related to this category will also be removed')" class="btn btn-warning btn-sm">Remove</a>
+                </div>
             {% endfor %}
         </ul>
 
