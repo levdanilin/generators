@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Image;
 use App\Form\Type\GetImageType;
 use App\Form\Type\UploadImageType;
@@ -61,6 +62,7 @@ class ImageResolverController extends AbstractController
 
     /**
      * @param Request $request
+     * @param ImageRepository $imageRepository
      * @return Response
      * @Route ("/imageresolver/", name="imageresolver")
      */
@@ -72,12 +74,12 @@ class ImageResolverController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $categoryIds = [];
+
             $categories = $form->getData()->getCategories();
-            foreach ($categories as $category)
-            {
-                $categoryIds[] = $category->getId();
-            }
+
+            $categoryIds = array_map(function(Category $category) {
+                return $category->getId();
+            }, $categories->toArray());
 
             try {
                 $image = $imageRepository->findRandomByCategories($categoryIds);
@@ -89,7 +91,7 @@ class ImageResolverController extends AbstractController
                 }
 
             } catch (Exception | \Doctrine\DBAL\Exception $e) {
-
+                    $this->addFlash('warning', $e->getMessage());
             }
 
         }

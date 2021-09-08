@@ -37,7 +37,9 @@ class UploadImageType extends AbstractType
                 'label' => 'Please upload an image',
                 'mapped' => false,
             ])
-             ->add('upload', SubmitType::class)
+             ->add('upload', SubmitType::class, [
+                 'attr' => ['class' => 'btn btn-success btn-lg'],
+             ])
            ;
 
     }

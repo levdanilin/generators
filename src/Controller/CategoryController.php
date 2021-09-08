@@ -20,7 +20,6 @@ class CategoryController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $categoryRepository = $em->getRepository(Category::class);
-        $categories = $categoryRepository->findAll();
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
@@ -28,7 +27,10 @@ class CategoryController extends AbstractController
         {
             $em->persist($category);
             $em->flush();
+            $this->addFlash('success', 'Category ' . $category->getName() . ' was successfully added! ');
+            return $this->redirectToRoute('imagecategory_new');
         }
+        $categories = $categoryRepository->findAll();
         return $this->render('ImageResolver/imageCategories.html.twig', [
             'form' => $form->createView(),
             'categories' => $categories,
@@ -37,6 +39,7 @@ class CategoryController extends AbstractController
 
     /**
      * @param $id
+     * @return Response
      * @Route ("/imageuploader/category/delete/{id}", name="imagecategory_delete")
      */
     public function deleteCategory($id): Response
@@ -49,6 +52,7 @@ class CategoryController extends AbstractController
         }
         $em->remove($category);
         $em->flush();
+        $this->addFlash('success', 'Category ' . $category->getName() . ' was successfully removed! ');
         return $this->redirectToRoute('imagecategory_new');
     }
 }

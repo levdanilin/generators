@@ -27,7 +27,15 @@ class ImageRepository extends ServiceEntityRepository
     public function findRandomByCategories(array $categoryIds): ?Image
     {
         $query = 'select distinct image_id from image_category where image_id in (select image_id from image_category where category_id = ?)';
-        if(count($categoryIds) > 0)
+
+        foreach ($categoryIds as $key => $value)
+        {
+            if($key > 0)
+            {
+                $query .= ' and image_id in (select image_id from image_category where category_id = ?)';
+            }
+        }
+        /*if(count($categoryIds) > 0)
         {
 
             for ($i = 1; $i < count($categoryIds); $i++)
@@ -35,7 +43,7 @@ class ImageRepository extends ServiceEntityRepository
                 $query .= ' and image_id in (select image_id from image_category where category_id = ?)';
             }
 
-        }
+        }*/
 
         $query .= ' order by rand() limit 1';
 
@@ -44,9 +52,9 @@ class ImageRepository extends ServiceEntityRepository
         $connection = $em->getConnection();
         $statement = $connection->prepare($query);
 
-        for($i = 0; $i<count($categoryIds); $i++)
+        foreach ($categoryIds as $key => $value)
         {
-            $statement->bindValue($i+1, $categoryIds[$i]);
+            $statement->bindValue($key+1, $value);
         }
 
         $result = $statement->executeQuery()->fetchAssociative();

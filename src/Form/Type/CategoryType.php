@@ -18,8 +18,8 @@ class CategoryType extends AbstractType
                 'label' => false,
                 'attr' => ['placeholder' => 'Please enter a Category name']
             ])
-            ->add('Add', SubmitType::class, [
-                'attr' => ['class' => 'btn-success fs-5'],
+            ->add('add', SubmitType::class, [
+                'attr' => ['class' => 'btn-success btn btn-lg fs-5'],
             ])
             ;
     }

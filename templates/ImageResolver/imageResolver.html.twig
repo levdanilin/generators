@@ -1,12 +1,27 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+
+    {% block stylesheets %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('/assets/css/image-resolver.css') }}">
+    {% endblock %}
+
     {% for message in app.flashes('warning') %}
         <div class="alert alert-info">
             {{ message }}
         </div>
     {% endfor %}
-    <div id="form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3">
-        {{ form(form) }}
+    <div id="get-image-form-wrapper" class="h5 m-auto w-50 p-4 border border-dark-light border-5 rounded-3">
+        {{ form_start(form) }}
+            {{ form_row(form.categories) }}
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                        {{ form_row(form.get) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
     </div>
 
         {% if image is not null %}

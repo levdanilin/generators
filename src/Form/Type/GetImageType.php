@@ -32,7 +32,9 @@ class GetImageType extends AbstractType
                     return $category->getName();
                 }
             ])
-            ->add('get', SubmitType::class)
+            ->add('get', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-secondary btn-lg'],
+            ])
         ;
 
     }

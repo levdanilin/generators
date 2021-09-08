@@ -1,16 +1,52 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div id="category-form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3 bg-secondary bg-gradient text-white">
-        <h3 class="text-dark">Your categories:</h3>
-        <ul>
-            {% for category in categories %}
-                <div  class="p-2">
-                    <li>{{ category.name }}</li>
-                    <a href="{{ path('imagecategory_delete', {id: category.id}) }}" onclick="return confirm('Sure? All images related to this category will also be removed')" class="btn btn-warning btn-sm">Remove</a>
-                </div>
-            {% endfor %}
-        </ul>
 
-        {{ form(form) }}
+    {% block stylesheets %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('/assets/css/image-resolver.css') }}">
+    {% endblock %}
+
+    <div id="category-form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3 bg-secondary bg-gradient">
+        {# TODO #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-info">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h3 class="text-center pb-3 fw-bold">Your categories:</h3>
+        <table class="table-info table">
+            {# TODO <thead>
+            <tr>
+                <th>
+                </th>
+            </tr>
+            </thead>#}
+            <tbody>
+            {% for category in categories %}
+            <tr>
+                <td id="category-name">{{ category.name }}</td>
+                <td><a href="{{ path('imagecategory_delete', {id: category.id}) }}" onclick="return confirm('Sure to delete {{ category.name }}? All images related to this category will also be removed')" class="btn btn-warning btn-lg">Remove</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+       {# <ul>
+            {% for category in categories %}
+                    <li class="p-2 m-2">
+                        {{ category.name }}<br><a href="{{ path('imagecategory_delete', {id: category.id}) }}" onclick="return confirm('Sure to delete {{ category.name }}? All images related to this category will also be removed')" class="btn btn-warning btn-sm">Remove</a>
+                    </li>
+            {% endfor %}
+        </ul>#}
+
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center mt-3">
+                        {{ form_row(form.add) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}

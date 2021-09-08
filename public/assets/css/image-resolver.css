@@ -1,0 +1,47 @@
+/*image-uploader*/
+#uploader-form-wrapper {
+    background-color: #80CBC4;
+    font-family: 'American Typewriter', sans-serif;
+    font-size: x-large;
+    font-weight: bold;
+
+}
+
+#upload_image_categories {
+    color: #C51162;
+}
+
+#categories-wrapper {
+    color: #37474F;
+}
+
+#categories-wrapper > fieldset > legend, label[for="upload_image_image"] {
+    color: #1A237E;
+}
+
+/*image-categories*/
+#category-form-wrapper {
+    font-family: 'American Typewriter', sans-serif;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+#category-name {
+    color: olive;
+}
+
+/*image-resolver*/
+#get-image-form-wrapper {
+    background-color: #6699ff;
+}
+
+form[name="get_image"] >fieldset >legend, label[for^="get_image_categories"], #get_image_get {
+    font-family: 'American Typewriter', sans-serif;
+    font-size: x-large;
+    font-weight: bold;
+    color: wheat;
+}
+
+label[for^="get_image_categories"] {
+    color: rebeccapurple;
+}
