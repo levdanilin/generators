@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\File;
 
 class UploadImageType extends AbstractType
 {
@@ -36,6 +37,13 @@ class UploadImageType extends AbstractType
             ->add('image', FileType::class, [
                 'label' => 'Please upload an image',
                 'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2024k',
+                        'mimeTypes' => 'image/*',
+                        'mimeTypesMessage' => 'Please upload a valid Image',
+                    ]),
+                ],
             ])
              ->add('upload', SubmitType::class, [
                  'attr' => ['class' => 'btn btn-success btn-lg'],

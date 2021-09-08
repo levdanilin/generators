@@ -43,7 +43,7 @@ class ImageResolverController extends AbstractController
                     $imageFile->move($this->getParameter('images_directory'),
                     $newFilename);
                 } catch (FileException $e) {
-                    echo $e->getMessage();
+                    $this->addFlash('warning', $e->getMessage());
                 }
                 $path = '/uploads/images/' . $newFilename;
                 $image->setPath($path);

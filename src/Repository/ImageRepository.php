@@ -26,24 +26,14 @@ class ImageRepository extends ServiceEntityRepository
      */
     public function findRandomByCategories(array $categoryIds): ?Image
     {
-        $query = 'select distinct image_id from image_category where image_id in (select image_id from image_category where category_id = ?)';
-
-        foreach ($categoryIds as $key => $value)
+        $query = 'select distinct image_id from image_category';
+        //TODO correct?
+        $where = [];
+        foreach ($categoryIds as $categoryId)
         {
-            if($key > 0)
-            {
-                $query .= ' and image_id in (select image_id from image_category where category_id = ?)';
-            }
+            $where[] = 'image_id in (select image_id from image_category where category_id = ?)';
         }
-        /*if(count($categoryIds) > 0)
-        {
-
-            for ($i = 1; $i < count($categoryIds); $i++)
-            {
-                $query .= ' and image_id in (select image_id from image_category where category_id = ?)';
-            }
-
-        }*/
+        $query = $query . ' where ' . implode(' and ', $where);
 
         $query .= ' order by rand() limit 1';
 
