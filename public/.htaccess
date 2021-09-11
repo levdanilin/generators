@@ -1,0 +1,6 @@
+AuthType Basic
+AuthName "Secured Area"
+AuthBasicProvider    file
+AuthUserFile "/opt/homebrew/etc/httpd/.htpasswd"
+Require valid-user
+

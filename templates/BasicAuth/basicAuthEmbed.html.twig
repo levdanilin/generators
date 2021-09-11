@@ -49,10 +49,10 @@
                             {% if basicAuth.directoryPath is not null%}
 
                                 <pre><code>
-                         &lt;directory /{{ basicAuth.directoryPath }}&gt;
+                         &lt;directory "/{{ basicAuth.directoryPath }}"&gt;
                             AuthType Basic
                             AuthName "Secured Area"
-                            AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
+                            AuthUserFile  "{{ basicAuth.htpasswdPath }}.htpasswd"
                             Require valid-user
                          &lt;/directory&gt;
                         </code></pre>
@@ -62,7 +62,7 @@
                                 <pre><code>
                             AuthType Basic
                             AuthName "Security Area"
-                            AuthUserFile/{{ basicAuth.htpasswdPath }}/.htpasswd
+                            AuthUserFile "{{ basicAuth.htpasswdPath }}.htpasswd"
                             Require valid-user
                         </code></pre>
                             {% endif %}
