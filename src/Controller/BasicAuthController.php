@@ -18,7 +18,7 @@ class BasicAuthController extends AbstractController
      * @return RedirectResponse
      * @Route ("/", name = "root")
      */
-    public function redirectToBasicAuth(): RedirectResponse
+    public function index(): RedirectResponse
     {
         return $this->redirectToRoute('basicauth');
     }
