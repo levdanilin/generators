@@ -7,15 +7,6 @@
     {% endblock %}
 
     <div id="category-form-wrapper" class="h5 m-auto w-50 p-4 border border-secondary border-5 rounded-3 bg-secondary bg-gradient">
-
-        {% for type in ['success', 'warning'] %}
-            {% for message in app.flashes(type) %}
-                <div class="alert alert-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
         <h3 class="text-center pb-3 fw-bold">Your categories:</h3>
         <table class="table-info table">
             <tbody>

@@ -9,6 +9,7 @@
         {% endblock %}
     </head>
     <body>
+
     {% block nav %}
         {# TODO inline styles? #}
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 fs-5">
@@ -40,6 +41,18 @@
             </nav>
 
     {% endblock %}
+
+  <div id="category-form-wrapper" class="h5 m-auto w-50 p-4">
+        {% block flashes %}
+            {% for type in ['success', 'warning'] %}
+                {% for message in app.flashes(type) %}
+                    <div class="alert alert-{{ type }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endblock %}
+   </div>
 
         {% block body %}
         {% endblock %}

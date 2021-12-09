@@ -1,4 +1,4 @@
-body > div:first-of-type, .col {
+body > div:nth-of-type(2), .col {
     background-color: #B2DFDB;
     font-family: 'American Typewriter', sans-serif;
 }

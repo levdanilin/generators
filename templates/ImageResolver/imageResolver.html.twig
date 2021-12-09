@@ -6,11 +6,6 @@
         <link rel="stylesheet" href="{{ asset('/assets/css/image-resolver.css') }}">
     {% endblock %}
 
-    {% for message in app.flashes('warning') %}
-        <div class="alert alert-info">
-            {{ message }}
-        </div>
-    {% endfor %}
     <div id="get-image-form-wrapper" class="h5 m-auto w-50 p-4 border border-dark-light border-5 rounded-3">
         {{ form_start(form) }}
             {{ form_row(form.categories) }}
