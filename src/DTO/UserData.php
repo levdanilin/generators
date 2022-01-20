@@ -17,7 +17,7 @@ class UserData
     }
 
     /**
-     * @param string|null $userName
+     * @param string $userName
      * @return UserData
      */
     public function setUserName(string $userName): self
@@ -35,7 +35,7 @@ class UserData
     }
 
     /**
-     * @param string|null $password
+     * @param string $password
      * @return UserData
      */
     public function setPassword(string $password): self

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
@@ -27,10 +28,10 @@ class Image
     private ?string $path = null;
 
     /**
-     * @var Collection | Category[]
+     * @var Category[] | Collection
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="images")
      */
-    private Collection $categories;
+    private Collection|array $categories;
 
     /**
      * @var string
@@ -38,7 +39,7 @@ class Image
      */
     private string $filename;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->categories = new ArrayCollection();
     }
@@ -62,7 +63,7 @@ class Image
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPath(): ?string
     {

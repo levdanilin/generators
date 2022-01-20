@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PasswordGeneratorController extends AbstractController
@@ -18,7 +17,7 @@ class PasswordGeneratorController extends AbstractController
      * @return Response
      * @Route ("/passwordgenerator/", name="passwordgenerator")
      */
-    public function generate(Request $request, FlashBagInterface $flashBag): Response
+    public function generate(Request $request): Response
     {
         $passwordGenerator = new PasswordGenerator();
         $form = $this->createForm(PasswordGeneratorType::class, $passwordGenerator);
@@ -41,12 +40,11 @@ class PasswordGeneratorController extends AbstractController
             }
             if(!$passwordGenerator->hasUpperCase() && !$passwordGenerator->hasLowerCase() && !$passwordGenerator->hasSymbols() && !$passwordGenerator->hasNumbers())
             {
-                $flashBag->add('warning','Please select at least one parameter' );
+                $session = $request->getSession();
+                $session->getFlashBag()->add('warning','Please select at least one parameter' );
             } else {
                 $passwordGenerator->setPassword($computerPasswordGenerator->generatePassword());
             }
-
-
         }
         return $this->render('PasswordGenerator/passwordGenerator.html.twig',[
             'form' => $form->createView(),

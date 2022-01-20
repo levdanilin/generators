@@ -14,11 +14,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
+use Doctrine\Persistence\ManagerRegistry;
 
 
 class ImageResolverController extends AbstractController
 {
+    private ManagerRegistry $managerRegistry;
+
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
+
     /**
      * @param Request $request
      * @param SluggerInterface $slugger
@@ -49,7 +59,7 @@ class ImageResolverController extends AbstractController
                 $image->setPath($path);
                 $image->setFilename($newFilename);
 
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->managerRegistry->getManager();
                 $entityManager->persist($image);
                 $entityManager->flush();
                 $this->addFlash('success', 'You have successfully uploaded an image!');

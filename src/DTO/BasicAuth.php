@@ -5,7 +5,7 @@ namespace App\DTO;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
+use JetBrains\PhpStorm\Pure;
 
 
 class BasicAuth
@@ -14,7 +14,7 @@ class BasicAuth
     protected ?string $htpasswdPath = null;
     protected Collection $userData;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->userData = new ArrayCollection();
     }
@@ -46,7 +46,7 @@ class BasicAuth
     }
 
     /**
-     * @param string|null $htpasswdPath
+     * @param string $htpasswdPath
      * @return BasicAuth
      */
     public function setHtpasswdPath(string $htpasswdPath): self

@@ -22,7 +22,6 @@ class ImageRepository extends ServiceEntityRepository
 
     /**
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function findRandomByCategories(array $categoryIds): ?Image
     {

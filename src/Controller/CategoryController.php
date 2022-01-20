@@ -8,9 +8,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 class CategoryController extends AbstractController
 {
+    private ManagerRegistry $managerRegistry;
+
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
+
     /**
      * @param Request $request
      * @return Response
@@ -18,7 +29,7 @@ class CategoryController extends AbstractController
      */
     public function addCategory(Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $categoryRepository = $em->getRepository(Category::class);
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -44,7 +55,7 @@ class CategoryController extends AbstractController
      */
     public function deleteCategory($id): Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $categoryRepository = $em->getRepository(Category::class);
         $category = $categoryRepository->find($id);
         if(!$category) {
