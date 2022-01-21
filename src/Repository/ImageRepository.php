@@ -55,6 +55,4 @@ class ImageRepository extends ServiceEntityRepository
 
         return $image;
     }
-
-
 }

@@ -18,13 +18,6 @@
             {% endfor %}
             </tbody>
         </table>
-       {# <ul>
-            {% for category in categories %}
-                    <li class="p-2 m-2">
-                        {{ category.name }}<br><a href="{{ path('imagecategory_delete', {id: category.id}) }}" onclick="return confirm('Sure to delete {{ category.name }}? All images related to this category will also be removed')" class="btn btn-warning btn-sm">Remove</a>
-                    </li>
-            {% endfor %}
-        </ul>#}
 
         {{ form_start(form) }}
             {{ form_row(form.name) }}

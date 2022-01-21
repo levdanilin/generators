@@ -8,6 +8,7 @@ use App\Form\Type\GetImageType;
 use App\Form\Type\UploadImageType;
 use App\Repository\ImageRepository;
 use Doctrine\DBAL\Driver\Exception;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,5 +111,68 @@ class ImageResolverController extends AbstractController
             'image' => $image,
             'form' => $form->createView(),
             ]);
+    }
+
+    /**
+     * @Route ("/imagegallery/", name="imagegallery")
+     * @return Response
+     */
+    public function showAllImages(): Response
+    {
+        $em = $this->managerRegistry->getManager();
+        $galleryImages[] = $em->getRepository(Image::class)->findAll();
+        if(empty($galleryImages[0]))
+        {
+            $this->addFlash('success', 'You have no images yet!');
+        }
+        //dump($galleryImages);die;
+        return $this->render('ImageResolver/imageGallery.html.twig', [
+            'galleryImages' => $galleryImages,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     * @Route ("/imagegallery/delete/{id}", name="imagegallery_delete")
+     */
+    public function deleteImage($id): Response
+    {
+        $em = $this->managerRegistry->getManager();
+        $imageRepository = $em->getRepository(Image::class);
+        $image = $imageRepository->find($id);
+        if(!$image) {
+            throw $this->createNotFoundException('Image ' . $id . ' was not found');
+        }
+        $filename = $image->getFilename();
+        $filesystem = new Filesystem();
+        $filesystem->remove($this->getParameter('public_directory') . '/uploads/images/' . $filename);
+        $em->remove($image);
+        $em->flush();
+        $this->addFlash('success', 'Image was successfully removed! ');
+        return $this->redirectToRoute('imagegallery');
+    }
+
+    /**
+     * @Route ("/imagegallery/deleteall", name="imagegallery_delete_all")
+     * @return Response
+     */
+    public function deleteAllImages(): Response
+    {
+        $em = $this->managerRegistry->getManager();
+        $imageRepository = $em->getRepository(Image::class);
+        $array[] = $imageRepository->findAll();
+        $images = $array[0];
+        if(empty($images)) {
+            throw $this->createNotFoundException('You have no images yet');
+        }
+        $filesystem = new Filesystem();
+        foreach($images as $image) {
+                $filesystem->remove($this->getParameter('public_directory') . '/uploads/images/' . $image->getFilename());
+                $em->remove($image);
+            }
+        $em->flush();
+        $this->addFlash('success', 'All images were successfully removed! ');
+        return $this->redirectToRoute('imagegallery');
     }
 }

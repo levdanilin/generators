@@ -35,6 +35,9 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ app.request.attributes.get('_route') == 'imageresolver' ? 'active' }}" href="{{ path('imageresolver') }}">Get Image</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ app.request.attributes.get('_route') == 'imagegallery' ? 'active' }}" href="{{ path('imagegallery') }}">Gallery</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
