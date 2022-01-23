@@ -18,3 +18,32 @@
  display: flex;
  justify-content: space-around;
 }
+
+.image-window {
+ width: 100vw;
+ height: 100vw;
+ background-color: rgba(0,0,0,0.8);
+ position: fixed;
+ top: 0;
+ left: 0;
+ cursor: pointer;
+ display: flex;
+ justify-content: center;
+ z-index: 100;
+}
+
+.image-window img {
+ max-height: 80vh;
+ max-width: 80vw;
+}
+
+.delete-button {
+ background-color: #9C3B26;
+ color: #5eb5e0;
+}
+
+.delete-all-button {
+ background-color: coral;
+ color: darkslategray;
+}
+

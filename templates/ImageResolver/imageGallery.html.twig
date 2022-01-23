@@ -8,16 +8,21 @@
 {% block body %}
     {% if images is not empty %}
         <div class="text-center">
-            <a href="{{ path('imagegallery_delete_all') }}" onclick="return confirm('Sure to delete all images?')" class="btn btn-outline-danger btn-lg mb-5">Remove All</a>
+            <a href="{{ path('imagegallery_delete_all') }}" onclick="return confirm('Sure to delete all images?')" class="delete-all-button btn btn-lg mb-5">Remove All</a>
         </div>
     {% endif %}
     <div class="wrapper">
             {% for image in images %}
                 <div class="content-wrapper">
-                    <a href="{{ path('imagegallery_delete', {id: image.id}) }}" onclick="return confirm('Sure to delete this image?')" class="btn btn-danger btn-lg">Remove</a>
+                    <a href="{{ path('imagegallery_delete', {id: image.id}) }}" onclick="return confirm('Sure to delete this image?')" class="delete-button btn btn-lg">Remove</a>
                     <img class="image" src="{{ asset(image.path) }}" alt="{{ image.filename }}">
                 </div>
 
             {% endfor %}
     </div>
+
 {% endblock %}
+
+ {% block javascripts %}
+     <script src="{{ asset('assets/js/image-gallery.js') }}"></script>
+ {% endblock %}
