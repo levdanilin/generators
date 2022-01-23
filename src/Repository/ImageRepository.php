@@ -26,7 +26,6 @@ class ImageRepository extends ServiceEntityRepository
     public function findRandomByCategories(array $categoryIds): ?Image
     {
         $query = 'SELECT DISTINCT image_id FROM image_category';
-        //TODO correct?
         $where = [];
         foreach ($categoryIds as $categoryId)
         {
@@ -54,5 +53,12 @@ class ImageRepository extends ServiceEntityRepository
         }
 
         return $image;
+    }
+
+    public function showAllImages(): array
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT i FROM App\Entity\Image i');
+        return $query->getResult();
     }
 }

@@ -117,17 +117,15 @@ class ImageResolverController extends AbstractController
      * @Route ("/imagegallery/", name="imagegallery")
      * @return Response
      */
-    public function showAllImages(): Response
+    public function showAllImages(ImageRepository $imageRepository): Response
     {
-        $em = $this->managerRegistry->getManager();
-        $galleryImages[] = $em->getRepository(Image::class)->findAll();
-        if(empty($galleryImages[0]))
+        $images = $imageRepository->showAllImages();
+        if(empty($images))
         {
             $this->addFlash('success', 'You have no images yet!');
         }
-        //dump($galleryImages);die;
         return $this->render('ImageResolver/imageGallery.html.twig', [
-            'galleryImages' => $galleryImages,
+            'images' => $images,
         ]);
     }
 
@@ -157,20 +155,18 @@ class ImageResolverController extends AbstractController
      * @Route ("/imagegallery/deleteall", name="imagegallery_delete_all")
      * @return Response
      */
-    public function deleteAllImages(): Response
+    public function deleteAllImages(ImageRepository $imageRepository): Response
     {
-        $em = $this->managerRegistry->getManager();
-        $imageRepository = $em->getRepository(Image::class);
-        $array[] = $imageRepository->findAll();
-        $images = $array[0];
+        $images = $imageRepository->showAllImages();
         if(empty($images)) {
             throw $this->createNotFoundException('You have no images yet');
         }
+        $em = $this->managerRegistry->getManager();
         $filesystem = new Filesystem();
         foreach($images as $image) {
-                $filesystem->remove($this->getParameter('public_directory') . '/uploads/images/' . $image->getFilename());
-                $em->remove($image);
-            }
+            $filesystem->remove($this->getParameter('public_directory') . '/uploads/images/' . $image->getFilename());
+            $em->remove($image);
+        }
         $em->flush();
         $this->addFlash('success', 'All images were successfully removed! ');
         return $this->redirectToRoute('imagegallery');
